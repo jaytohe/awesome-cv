@@ -80,8 +80,13 @@
 \RequirePackage[skins]{tcolorbox}
 % Needed to deal a paragraphs
 \RequirePackage{parskip}
+
+\RequirePackage{longtable}
+
+% URL link border color
+\definecolor{url_border}{rgb}{0.90,0.90,0.90}
 % Needed to deal hyperlink
-\RequirePackage[hidelinks,unicode,pdfpagelabels=false]{hyperref}
+\RequirePackage[urlbordercolor=url_border, pdfborder={0 0 0.6}, unicode,pdfpagelabels=false]{hyperref}
 \hypersetup{%
   pdftitle={},
   pdfauthor={},
@@ -712,6 +717,41 @@
 \newcommand*{\cvskill}[2]{%
 	\skilltypestyle{#1} & \skillsetstyle{#2} \\
 }
+
+
+%New length definition
+\newlength{\fulllength}
+\setlength{\fulllength}{17.8cm}
+\newlength{\leftcolumnlength}
+\setlength{\leftcolumnlength}{2.5cm}
+
+\newlength{\rightcolumnlength}
+%\setlength{\rightcolumnlength}{15.3cm minus 1cm}
+%\setlength{\rightcolumnlength}{\dimexpr(\fulllength-\leftcolumnlength)\relax}
+\setlength{\rightcolumnlength}{\dimexpr(\fulllength-\leftcolumnlength)\relax}
+
+% Define an environment for cvdevlang
+\newenvironment{cvdevlangs}{%
+  \begin{longtable}{R{\leftcolumnlength}p{\rightcolumnlength}}
+}{%
+  \end{longtable}
+}
+
+% % Render programming langauge and amount of experience
+% Usage: \cvdevlang{<name>}{<percentage>}
+\newcommand\cvdevlang[2]{
+  \textbf{#1}    & \foreach \x in {1,...,5}{{\color{gray} \ifnumgreater{\x}{#2}{\faCircle[regular]}{\faCircle}}\enspace } \\
+}
+
+\newcommand*\twocolumnsection[2]{
+  \begin{minipage}[t]{\dimexpr(\linewidth/2) - 3em}
+    #1
+  \end{minipage}
+  \hfill
+  \begin{minipage}[t]{\dimexpr(\linewidth/2) - 3em}
+    #2
+  \end{minipage}
+  }
 
 % Define an environment for cvitems(for cventry)
 \newenvironment{cvitems}{%
